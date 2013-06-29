@@ -1,8 +1,10 @@
+## RoombaPi Robot project
+
 This project will include all of the code that for the RoombaPi Robot project. The RoombaPi Robot is based on an iRobot Roomba platform, Raspberry Pi and Raspberry Pi Camera or a Webcam.
 
-test-1.py   - Simple test to see that pyrobot.py works for controlling Roomba.
-test-2.py   - Simple test to verify reading sensor inputs.
-RoombaPi.py - Simple teleop using WebIOPi - http://code.google.com/p/webiopi/
+* test-1.py   - Simple test to see that pyrobot.py works for controlling Roomba.
+* test-2.py   - Simple test to verify reading sensor inputs.
+* RoombaPi.py - Simple teleop using WebIOPi - http://code.google.com/p/webiopi/
 
 More to follow...
 
