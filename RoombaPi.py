@@ -12,54 +12,54 @@ GPIO = webiopi.GPIO
 # -------------------------------------------------- #
 
 # Left motor GPIOs
-L1=9  # H-Bridge 1
-L2=10 # H-Bridge 2
-LS=11 # H-Bridge 1,2EN
+#L1=9  # H-Bridge 1
+#L2=10 # H-Bridge 2
+#LS=11 # H-Bridge 1,2EN
 
 # Right motor GPIOs
-R1=23 # H-Bridge 3
-R2=24 # H-Bridge 4
-RS=25 # H-Bridge 3,4EN
+#R1=23 # H-Bridge 3
+#R2=24 # H-Bridge 4
+#RS=25 # H-Bridge 3,4EN
 
 # -------------------------------------------------- #
 # Convenient PWM Function                            #
 # -------------------------------------------------- #
 
 # Set the speed of two motors
-def set_speed(speed):
-    GPIO.pulseRatio(LS, speed)
-    GPIO.pulseRatio(RS, speed)
+#def set_speed(speed):
+#    GPIO.pulseRatio(LS, speed)
+#    GPIO.pulseRatio(RS, speed)
 
 # -------------------------------------------------- #
 # Left Motor Functions                               #
 # -------------------------------------------------- #
 
-def left_stop():
-    GPIO.output(L1, GPIO.LOW)
-    GPIO.output(L2, GPIO.LOW)
+#def left_stop():
+#    GPIO.output(L1, GPIO.LOW)
+#    GPIO.output(L2, GPIO.LOW)
 
-def left_forward():
-    GPIO.output(L1, GPIO.HIGH)
-    GPIO.output(L2, GPIO.LOW)
+#def left_forward():
+#    GPIO.output(L1, GPIO.HIGH)
+#    GPIO.output(L2, GPIO.LOW)
 
-def left_backward():
-    GPIO.output(L1, GPIO.LOW)
-    GPIO.output(L2, GPIO.HIGH)
+#def left_backward():
+#    GPIO.output(L1, GPIO.LOW)
+#    GPIO.output(L2, GPIO.HIGH)
 
 # -------------------------------------------------- #
 # Right Motor Functions                              #
 # -------------------------------------------------- #
-def right_stop():
-    GPIO.output(R1, GPIO.LOW)
-    GPIO.output(R2, GPIO.LOW)
+#def right_stop():
+#    GPIO.output(R1, GPIO.LOW)
+#    GPIO.output(R2, GPIO.LOW)
 
-def right_forward():
-    GPIO.output(R1, GPIO.HIGH)
-    GPIO.output(R2, GPIO.LOW)
+#def right_forward():
+#    GPIO.output(R1, GPIO.HIGH)
+#    GPIO.output(R2, GPIO.LOW)
 
-def right_backward():
-    GPIO.output(R1, GPIO.LOW)
-    GPIO.output(R2, GPIO.HIGH)
+#def right_backward():
+#    GPIO.output(R1, GPIO.LOW)
+#    GPIO.output(R2, GPIO.HIGH)
 
 # -------------------------------------------------- #
 # Macro definition part                              #
@@ -72,12 +72,12 @@ def led_off():
     GPIO.output(24, GPIO.LOW)
 
 def go_forward():
-    r.DriveStraight(pyrobot.VELOCITY_SLOW)
+    r.DriveStraight(pyrobot.VELOCITY_FAST)
     #left_forward()
     #right_forward()
 
 def go_backward():
-    r.DriveStraight(-pyrobot.VELOCITY_SLOW)
+    r.DriveStraight(-pyrobot.VELOCITY_FAST)
     #left_backward()
     #right_backward()
 
@@ -96,6 +96,19 @@ def stop():
     #left_stop()
     #right_stop()
     
+#  loop which toggles LED attached to GPIO 24 every 5 seconds
+def loop():
+    GPIO.output(24, not GPIO.input(24))
+    time.sleep(5)        
+
+def MacroWithArgs(arg1, arg2):
+    r.sensors.GetAll()
+    voltage = r.sensors['voltage']/1000.00
+    capacity = r.sensors['capacity']
+    charge = r.sensors['charge']
+    return("%s %s %s" % (voltage, capacity, charge))
+
+
 # -------------------------------------------------- #
 # Initialization part                                #
 # -------------------------------------------------- #
@@ -146,13 +159,18 @@ server.addMacro(turn_right)
 server.addMacro(stop)
 server.addMacro(led_on)
 server.addMacro(led_off)
+server.addMacro(MacroWithArgs)
 
 # -------------------------------------------------- #
 # Loop execution part                                #
 # -------------------------------------------------- #
 
 # Run our loop until CTRL-C is pressed or SIGTERM received
-webiopi.runLoop()
+webiopi.runLoop(loop)
+
+# If no specific loop is needed and defined above, just use 
+# webiopi.runLoop()
+
 
 # -------------------------------------------------- #
 # Termination part                                   #

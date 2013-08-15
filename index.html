@@ -55,6 +55,20 @@
 
 	
 	webiopi().ready(init);
+
+	//This auto calls the following macros instead of pressing a button or something.
+	setInterval ( "callMacro()", 9000); 
+	function callMacro() { 
+		var args = [1,2,] // or whatever you want 
+		// call MacroWithArgs(arg) 
+		webiopi().callMacro("MacroWithArgs", args, macroCallback); 
+	}
+
+	function macroCallback(MacroWith2Args, args, data) {
+		myDiv1.innerHTML = data.split(" ")[0] + " V";
+		myDiv2.innerHTML = data.split(" ")[1] + " mAh";
+		myDiv3.innerHTML = data.split(" ")[2] + " mAh";	
+ 	} 
 		
 	</script>
 	<style type="text/css">
@@ -74,6 +88,28 @@
 		<div id="up"></div>
 		<div id="middle"></div>
 		<div id="down"></div>
+
+		<table>
+			<tr> 
+				<td>Battery Voltage:</td>    
+     				<td><div id="myDiv1"></div></td>
+			</tr>
+			<tr> 
+				<td>Battery Capacity:</td>    
+     				<td><div id="myDiv2"></div></td>
+			</tr>
+			<tr>
+				<td>Battery Charge:</td>
+				<td><div id="myDiv3"></div></td>
+			</tr>
+ 
+		</table>
 	</div>
 </body>
+	<script type="text/javascript">
+		var myDiv1 = document.getElementById("myDiv1");
+		var myDiv2 = document.getElementById("myDiv2");
+		var myDiv3 = document.getElementById("myDiv3");
+   	</script>
 </html>
+
